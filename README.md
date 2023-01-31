@@ -1,7 +1,7 @@
-��#� �S�T�A�K�E� �B�O�T�
-�
-�
-##Sneakers webs 
+# Stake Bot
+
+
+## Sneakers webs 
 1. Snipes✔️
 2. Jd❌
 3. Solebox❌
