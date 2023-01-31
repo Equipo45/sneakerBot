@@ -1,37 +1,34 @@
 import puppeteer from 'puppeteer'
 import { getShoeObject,getShoeWeb,getAllKeys } from './utils.js'
-import { sendTheMsg } from '../discord/discordSetter.js';
+import { sendTheMsg } from '../../discord/discordSetter.js'
 
 getAllKeys().forEach(key => 
   (async (key) => {
 
   const shoeObject = getShoeObject(key)
   const webPage = getShoeWeb(shoeObject.uuid)
-  const browser = await puppeteer.launch({
-    args: [ '--proxy-server=http://p.webshare.io:80' ]
-  });
+  const browser = await puppeteer.launch();
   const page = await getPage(browser)
-  
-  await page.goto(webPage,{waitUntil: 'domcontentloaded'});
-  await page.waitForSelector(`select`)
-  
+
+  await page.goto(webPage, {waitUntil: 'domcontentloaded'});
+  await page.waitForSelector(".swatchanchor")
+
   const shoesArr = await page.evaluate((webPage) => {
-    const allElements = $(`select`).options
+    const allElements = document.querySelectorAll('.selectable')
     return Array.from(allElements)
-      .filter(el => !el.value.includes('Agotado'))
       .map((el) => {
         return {
           link:webPage,
-          size:el.value.trim(),
-          image:$(`.gallery-image`).src,
-          price:$(`[data-testid="current-price"]`).textContent.trim()
+          size:el.textContent.trim(),
+          image:document.querySelector(`[itemprop="image"]`).src,
+          price:document.querySelector(`[itemprop="price"]`).textContent.trim()
         }
       })
   },(webPage))
 
   shoesArr.forEach((shoe) => {
     const object = {...shoe,...shoeObject}
-    sendTheMsg(object,"1069363416134848583")
+    sendTheMsg(object,"1069363362380648478")
   })
 
   await browser.close()

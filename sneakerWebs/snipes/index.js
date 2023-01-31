@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer'
 import { getShoeObject,getShoeWeb,getAllKeys } from './utils.js'
-import { sendTheMsg } from '../discord/discordSetter.js';
+import { sendTheMsg } from '../../discord/discordSetter.js';
 
 getAllKeys().forEach(key => 
   (async (key) => {
@@ -11,24 +11,25 @@ getAllKeys().forEach(key =>
   const page = await getPage(browser)
 
   await page.goto(webPage, {waitUntil: 'domcontentloaded'});
-  await page.waitForSelector(".swatchanchor")
+  await page.waitForSelector(".b-swatch-value-wrapper")
 
-  const shoesArr = await page.evaluate((webPage) => {
-    const allElements = document.querySelectorAll('.selectable')
+  const shoesArr = await page.evaluate(() => {
+    const allElements = document.querySelectorAll('.b-swatch-value-wrapper')
     return Array.from(allElements)
+      .filter(el => el.innerHTML.includes("orderable"))
       .map((el) => {
         return {
-          link:webPage,
+          link:document.querySelector('a').href,
           size:el.textContent.trim(),
-          image:document.querySelector(`[itemprop="image"]`).src,
-          price:document.querySelector(`[itemprop="price"]`).textContent.trim()
+          image:document.querySelector('.b-dynamic_image_content').src,
+          price:document.querySelector('.b-product-tile-price-item').textContent.trim()
         }
       })
-  },(webPage))
+  })
 
   shoesArr.forEach((shoe) => {
     const object = {...shoe,...shoeObject}
-    sendTheMsg(object,"1069363362380648478")
+    sendTheMsg(object,"1069226460939833394")
   })
 
   await browser.close()
