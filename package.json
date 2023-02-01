@@ -13,5 +13,8 @@
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
     "puppeteer": "^19.6.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.33.0"
   }
 }
