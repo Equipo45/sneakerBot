@@ -1,13 +1,20 @@
 import puppeteer from 'puppeteer'
 import { getShoeObject,getShoeWeb,getAllKeys } from './utils.js'
 import { sendTheMsg } from '../../discord/discordSetter.js'
+import dotenv from "dotenv"
+
+dotenv.config()
 
 getAllKeys().forEach(key => 
   (async (key) => {
 
   const shoeObject = getShoeObject(key)
   const webPage = getShoeWeb(shoeObject.uuid)
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: [
+      process.env.ROTATING_PROXY_URL
+    ],
+  });
   const page = await getPage(browser)
 
   await page.goto(webPage, {waitUntil: 'domcontentloaded'});
