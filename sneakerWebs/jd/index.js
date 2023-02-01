@@ -11,25 +11,25 @@ getAllKeys().forEach(key =>
   const page = await getPage(browser)
 
   await page.goto(webPage, {waitUntil: 'domcontentloaded'});
-  await page.waitForSelector(".b-swatch-value-wrapper")
+  await page.waitForSelector(`[type="button"]`)
 
   const shoesArr = await page.evaluate((webPage) => {
-    const allElements = document.querySelectorAll('.b-swatch-value-wrapper')
+    const allElements = document.querySelectorAll(`[type="button"]`)
     return Array.from(allElements)
-      .filter(el => el.innerHTML.includes("orderable"))
+      .filter(el => !el.innerHTML.includes("noStockOverlay"))
       .map((el) => {
         return {
           link:webPage,
-          size:el.textContent.trim(),
-          image:document.querySelector('.b-dynamic_image_content').src,
-          price:document.querySelector('.b-product-tile-price-item').textContent.trim()
+          size:el.textContent.replace(/[^\d.]/g, ''),
+          image:document.querySelector('.imgMed').src,
+          price:document.querySelector('.pri').textContent.trim()//itemPrices
         }
       })
   },(webPage))
 
   shoesArr.forEach((shoe) => {
     const object = {...shoe,...shoeObject}
-    sendTheMsg(object,"1069226460939833394")
+    sendTheMsg(object,"1070371512860819507")
   })
 
   await browser.close()

@@ -29,7 +29,7 @@ getAllKeys().forEach(key =>
 
   shoesArr.forEach((shoe) => {
     const object = {...shoe,...shoeObject}
-    sendTheMsg(object,"1069226460939833394")
+    sendTheMsg(object,"1070370783978852414")
   })
 
   await browser.close()

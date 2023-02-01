@@ -39,7 +39,7 @@ function getEmbeded(object){
     )
     .setURL(object.link)
     .setTimestamp()
-    .setFooter({ text: 'TodasBot'})
+    .setFooter({ text: 'StakeBot'})
 }
 //Final log in
 client.login("MTA2OTIwODgzMjg4ODI3NDk0NA.GgR56z.4WD9VuXTH_BJ0X2qY6V6wiUw8kHkFWOVga8vgE")
