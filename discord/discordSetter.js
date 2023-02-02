@@ -17,9 +17,16 @@ client.on("ready", () => {
 	})
 })
 
+//MAIN FUNCTION
 export function sendTheMsg(object,channelId){
 	const channel = getChannel(channelId)
-	const embeded = getEmbeded(object)
+	const embeded = getShoeEmbeded(object)
+	channel.send({ embeds : [embeded]})
+}
+
+export function sendErrorLog(err){
+	const channel = getChannel("1070729719118581801")
+	const embeded = getErrorEmbeded(err)
 	channel.send({ embeds : [embeded]})
 }
 
@@ -27,7 +34,8 @@ function getChannel(channelId) {
 	const channel = client.channels.cache.get(channelId)
 	return channel
 }
-function getEmbeded(object){
+
+function getShoeEmbeded(object){
 	return new EmbedBuilder()
 		.setColor(0x009D71)
 		.setTitle(object.name)
@@ -41,6 +49,18 @@ function getEmbeded(object){
 		.setTimestamp()
 		.setFooter({ text: "StakeBot"})
 }
+
+function getErrorEmbeded(err){
+	return new EmbedBuilder()
+		.setColor(0xcb3234)
+		.setTitle("Error mesagge")
+		.addFields(
+			{ name : "Error", value: err }
+		)
+		.setTimestamp()
+		.setFooter({ text: "StakeBot"})
+}
+
 //Final log in
 client.login("MTA2OTIwODgzMjg4ODI3NDk0NA.GgR56z.4WD9VuXTH_BJ0X2qY6V6wiUw8kHkFWOVga8vgE")
 
