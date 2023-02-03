@@ -6,3 +6,4 @@
 2. Jd✔️
 3. Solebox✔️
 4. Zalando❌
+5. Courir✔️
