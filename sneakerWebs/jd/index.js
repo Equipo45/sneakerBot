@@ -1,65 +1,58 @@
 import puppeteer from "puppeteer"
-import { getShoeObject,getAllKeys,getPage } from "../utils/utils.js"
-import { sendTheMsg,sendErrorLog} from "../../discord/discordSetter.js"
+import { getShoeObject, getAllKeys, getPage } from "../utils/utils.js"
+import { sendTheMsg, sendErrorLog } from "../../discord/discordSetter.js"
 import dotenv from "dotenv"
 import jsonData from "./uuidJson.js"
-import { PropertyNotFoundError } from "../../errors/customErros.js"
 
 dotenv.config()
 
-getAllKeys(jsonData).forEach(key => {
-	try {
-		(async (key) => {
+export default getAllKeys(jsonData).forEach(key => {
+	(async (key) => {
 
-		const shoeObject = getShoeObject(key,jsonData)
+		const shoeObject = getShoeObject(key, jsonData)
 		const webPage = getShoeWeb(shoeObject.uuid)
 		const browser = await puppeteer.launch(
 			{
-				args: [
-					process.env.ROTATING_PROXY_URL
-				],
+				args: [process.env.ROTATING_PROXY_URL],
 			}
 		)
 		const page = await getPage(browser)
 
-		await page.goto(webPage, {waitUntil: "domcontentloaded"})
+		await page.goto(webPage, { waitUntil: "domcontentloaded" })
 		await page.waitForSelector("[type=\"button\"]")
 
 		const shoesArr = await page.evaluate((webPage) => {
 			try {
-			const allElements = document.querySelectorAll("[type=\"button\"]")
-			return Array.from(allElements)
-				.filter(el => !el.innerHTML.includes("noStockOverlay"))
-				.map((el) => {
-					return {
-						link:webPage,
-						size:el.textContent.replace(/[^\d.]/g, ""),
-						image:document.querySelector(".imgMed").src,
-						price:document.querySelector(".pri").textContent.trim()//itemPrices
-					}
-				})
+				const allElements = document.querySelectorAll("[type=\"button\"]")
+				return Array.from(allElements)
+					.filter(el => !el.innerHTML.includes("noStockOverlay"))
+					.map((el) => {
+						return {
+							link: webPage,
+							size: el.textContent.replace(/[^\d.]/g, ""),
+							image: document.querySelector(".imgMed").src,
+							price: document.querySelector(".pri").textContent.trim()//itemPrices
+						}
+					})
 			} catch (error) {
-				return { 
-					error:new PropertyNotFoundError(error,shoeObject.uuid)
+				return {
+					error: error
 				}
 			}
-		},(webPage))
+		}, (webPage))
 
-		if (shoesArr.error) throw shoesArr.error
+		if (shoesArr.error) sendErrorLog(`Error while searching for property in ${shoeObject.name} UUID ${shoeObject.uuid}`)
 
 		shoesArr.forEach((shoe) => {
-			const object = {...shoe,...shoeObject}
-			sendTheMsg(object,"1070371512860819507")
+			const object = { ...shoe, ...shoeObject }
+			sendTheMsg(object, "1070371512860819507")
 		})
 
 		await browser.close()
-		})(key)
-	} catch(error) {
-		sendErrorLog(error.message)
-	}
+	})(key)
 })
 
-export function getShoeWeb(uuid) {
+function getShoeWeb(uuid) {
 	return `https://www.jdsports.es/product/!/${uuid}_jdsportses/`
 }
 
