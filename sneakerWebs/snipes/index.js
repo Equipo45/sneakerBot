@@ -1,12 +1,11 @@
 import puppeteer from "puppeteer"
 import { getShoeObject, getAllKeys, getPage } from "../utils/utils.js"
-import { sendTheMsg, sendErrorLog } from "../../discord/discordSetter.js"
 import dotenv from "dotenv"
 import jsonData from "./uuidJson.js"
 
 dotenv.config()
 
-export default getAllKeys(jsonData).forEach(key => {
+export default async (clientClass) => getAllKeys(jsonData).forEach(key => {
 	(async (key) => {
 
 		const shoeObject = getShoeObject(key, jsonData)
@@ -41,11 +40,11 @@ export default getAllKeys(jsonData).forEach(key => {
 			}
 		}, (webPage))
 
-		if (shoesArr.error) sendErrorLog(`Error while searching for property in ${shoeObject.name} UUID ${shoeObject.uuid}`)
+		if (shoesArr.error) clientClass.sendErrorLog(`Error while searching for property in ${shoeObject.name} UUID ${shoeObject.uuid}`)
 
 		shoesArr.forEach((shoe) => {
 			const object = { ...shoe, ...shoeObject }
-			sendTheMsg(object, "1069226460939833394")
+			clientClass.sendTheMsg(object, "1069226460939833394")
 		})
 
 		await browser.close()

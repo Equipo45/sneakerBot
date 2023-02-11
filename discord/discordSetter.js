@@ -1,6 +1,6 @@
 import { Client, GatewayIntentBits, EmbedBuilder } from "discord.js"
 
-export class DiscordBot {
+export default class DiscordBot {
 	constructor() {
 		const client = new Client({
 			intents: [
