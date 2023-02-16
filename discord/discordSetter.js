@@ -17,7 +17,7 @@ export default class DiscordBot {
 				guild.channels.fetch()
 			})
 		})
-		client.login("MTA2OTIwODgzMjg4ODI3NDk0NA.GgR56z.4WD9VuXTH_BJ0X2qY6V6wiUw8kHkFWOVga8vgE")
+		client.login("token")
 		this.client = client
 	}
 
@@ -26,14 +26,14 @@ export default class DiscordBot {
 		const channel = getChannel(channelId)
 		const embeded = getShoeEmbeded(object)
 		channel.send({ embeds: [embeded] })
-		this.client.login("MTA2OTIwODgzMjg4ODI3NDk0NA.GgR56z.4WD9VuXTH_BJ0X2qY6V6wiUw8kHkFWOVga8vgE")
+		this.client.login("token")
 	}
 
 	sendErrorLog(err) {
 		const channel = getChannel("1070729719118581801")
 		const embeded = getErrorEmbeded(err)
 		channel.send({ embeds: [embeded] })
-		this.client.login("MTA2OTIwODgzMjg4ODI3NDk0NA.GgR56z.4WD9VuXTH_BJ0X2qY6V6wiUw8kHkFWOVga8vgE")
+		this.client.login("token")
 	}
 
 	getChannel(channelId) {
