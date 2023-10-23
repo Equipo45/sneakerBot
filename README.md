@@ -1,4 +1,4 @@
-# Stake Bot
+# Sneaker Bot
 
 
 ## Sneakers webs 
